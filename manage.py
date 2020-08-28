@@ -9,6 +9,7 @@ import sqlite3 as sq
 from datetime import date, datetime
 import winreg as win
 import os
+import time
 
 class Friend:
     def __init__(self):
@@ -42,6 +43,7 @@ class Friend:
                 print("Have a Good Day")
                 self.cur.close()
                 self.conn.close()
+                time.sleep(2)
                 exit()
             else:
                 print("Please Check Your Input..!!")
@@ -114,10 +116,12 @@ class Friend:
         data = self.cur.fetchone()
         # Checking if there is any data in the database then going further
         if data:
-            # Getting the path of the file autowisher.pyw to add to the registry
+            # Getting the path of the current file to later add to the registry
             path = os.path.dirname(os.path.realpath(__file__))
-            filename = "autowisher.pyw"
-            path = os.path.join(path, filename)
+            # Checking & creating run.bat file if not already exist
+            if not os.path.isfile('./run.bat'):
+                with open('run.bat', 'a') as run:
+                    run.write(f'@echo off\ncd /d "{path}"\nstart autowisher.pyw')
             # Checking if the registry entry is already present or not if yes then don't go further
             exists = True # Check variable
             aReg = win.ConnectRegistry(None, win.HKEY_CURRENT_USER) # Connecting to the registry
@@ -130,13 +134,14 @@ class Friend:
             # Registry entry process with the checking for the check variable if False then only perform the process with any error handling
             try:
                 if not exists:
+                    filename = "run.bat"
+                    path = os.path.join(path, filename)
                     win.SetValueEx(aKey, "AutoWisher", 0, win.REG_SZ, path) # Setting the registry
                     # Running the script for the first time as it will only run on startup or manually
-                    print("Running the Script for the very first time")
+                    print("Running the Script for the very first time keep calm")
                     # Temporarily closing the connection to the database
                     self.cur.close()
                     self.conn.close()
-                    # Running the script
                     import autowisher as auto
                     wish = auto.Wish()
                     wish
