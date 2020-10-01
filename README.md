@@ -1,5 +1,5 @@
 # Automatic Birthday Wisher
-It is a simple automatic birthday wisher app which will match today's date with the records in the database if present any then it will remind you with a notification and also send them personalized WhatsApp message on your behalf.
+It is a simple automatic birthday wisher app which will match today's date with the records in the database, if any record matches the database it will automactically notify you about it and send the personalised message to the birthday boy/girl on Whatsapp on your behalf.
 
 ## Features
 - Sqlite Database to store data
